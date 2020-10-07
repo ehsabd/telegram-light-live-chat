@@ -1,13 +1,19 @@
 <?php
+
+require_once(realpath(dirname(__FILE__).'/livechat-config.php'));
+require_once(realpath(dirname(__FILE__).'/models/settings.php'));
+require_once(realpath(dirname(__FILE__).'/models/helper.php'));
+
+
 if ( session_status() !== PHP_SESSION_ACTIVE ) session_start(); 
+
 cors();
-define('BOT_TOKEN', '809784753:AAGAf7riAkiiO_d0rw7W7_xaFnn21VVrFIQ');
+
+
 define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
-require_once('../models/settings.php');
-require_once('../models/helper.php');
 
-global $cps_db;
+global $livechat_db;
 
 $token = $_GET['token'];
 
@@ -32,6 +38,7 @@ if (!empty($token)){
           $message_text= $message['text'];
           
           if (preg_match('/token(.*):(.*)/', $message_text, $matches)){
+              
               $private_key = $matches[1];
               $admin_chat_token = strtolower($matches[2]);
               $hash = hash('sha256', $private_key, false);
@@ -55,20 +62,22 @@ if (!empty($token)){
     
     if (!empty($messages)){
       $insert_messages_cmd = build_insert_command($messages,'admin_chat_message',false);
-      $cps_db->query($insert_messages_cmd);
+      $livechat_db->query($insert_messages_cmd);
     }
    
     
-
+    log_with_sid('$token:'.json_encode($token));
     $admin_chat = get_admin_chat_by_token($token);
+    log_with_sid('$admin_chat:'.json_encode($admin_chat));
+    
     $admin_chat['dirty'] = false;
-
+    $current_session_id = null;
     if ($admin_chat){
       $now_utc = new DateTime('now', new DateTimeZone("UTC"));
       
       $last_message_timeout_minutes = 3;
       $last_heart_beat_timeout_seconds = 30;
-
+      if (array_key_exists('last_message_date_utc', $admin_chat )){ 
       $last_message_date_utc = $admin_chat['last_message_date_utc'];
       $last_heart_beat_utc = $admin_chat['last_heart_beat_utc'];
 
@@ -86,9 +95,11 @@ if (!empty($token)){
       }
       
       
-      $wrong_session_id = false;
+      
       $current_session_id = $admin_chat['current_session_id'];
-
+      }
+      $wrong_session_id = false;
+      
       if ($current_session_id!=null){
         if ($current_session_id != session_id()){
             $wrong_session_id = true;
@@ -141,18 +152,19 @@ function get_messages(&$admin_chat){
     $admin_chat['last_heart_beat_utc'] = now_utc_formatted();
     $admin_chat['dirty'] = true;
 
-    global $cps_db;
+    global $livechat_db;
     
-    $current_chat_start_date_utc = $cps_db->real_escape_string($admin_chat['current_chat_start_date_utc']);
-    $chat_id = $cps_db->real_escape_string($admin_chat['chat_id']);
+    $current_chat_start_date_utc = $livechat_db->real_escape_string($admin_chat['current_chat_start_date_utc']);
+    $chat_id = $livechat_db->real_escape_string($admin_chat['chat_id']);
 
     $select_cmd = "SELECT message_date_utc, message_text FROM `admin_chat_message`
     WHERE chat_id='$chat_id'
     AND message_date_utc > '$current_chat_start_date_utc'
     AND is_read = '0'
+    LOCK IN SHARE MODE
     ";
 
-    $result = $cps_db->query($select_cmd);
+    $result = $livechat_db->query($select_cmd);
 
     if ($result){
 
@@ -170,7 +182,7 @@ function get_messages(&$admin_chat){
       SET is_read = '1'
       WHERE chat_id = '$chat_id'";
 
-      $cps_db->query($update_is_read_cmd);
+      $livechat_db->query($update_is_read_cmd);
 
     }
 
@@ -241,18 +253,18 @@ function end_chat(&$admin_chat, $cause=''){
 }
 
 function add_admin_chat($token, $chat_id){
-    global $cps_db;
+    global $livechat_db;
     $cmd = "INSERT INTO admin_chat (chat_id, token) VALUES ('$chat_id','$token');";
-    $cps_db->query($cmd);
+    $livechat_db->query($cmd);
 }
 
 
 
 function get_admin_chat_by_token($token){
-    global $cps_db;
-    $token = $cps_db->real_escape_string($token);
+    global $livechat_db;
+    $token = $livechat_db->real_escape_string($token);
     $cmd = "SELECT * FROM admin_chat WHERE token='$token';";
-    $result = $cps_db->query($cmd);
+    $result = $livechat_db->query($cmd);
     if ($result){
       return $result->fetch_assoc();
     }else{
@@ -261,10 +273,10 @@ function get_admin_chat_by_token($token){
 }
 
 function update_admin_chat($admin_chat){
-  global $cps_db;
+  global $livechat_db;
   $chat_id=false;
   if (array_key_exists('chat_id', $admin_chat)){
-      $chat_id = $cps_db->real_escape_string($admin_chat['chat_id']);
+      $chat_id = $livechat_db->real_escape_string($admin_chat['chat_id']);
       unset($admin_chat['chat_id']);
       unset($admin_chat['token']);
   }
@@ -286,7 +298,7 @@ function update_admin_chat($admin_chat){
   }
   log_with_sid('INFO:'.$update_cmd);
 // var_dump($update_cmd);
-  $result = $cps_db->query($update_cmd);
+  $result = $livechat_db->query($update_cmd);
   return $result;
 }
 
@@ -481,4 +493,3 @@ function cors() {
 
 
 ?>
-
