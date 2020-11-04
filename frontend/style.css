@@ -1,545 +1,7 @@
-body {
-    font-family: 'Chakra Petch', sans-serif;
-}
-
-a {
-    color: #2a7dbd;
-}
-
-.btn {
-    border-radius: 0;
-    text-transform: uppercase;
-    font-weight: 700;
-    padding: .375rem .75rem;
-    /* border: none; */
-}
-
-.btn-primary {
-    background-color: #2a7dbd;
-    border-color: #2a7dbd;
-}
-
-.btn-secondary {
-    background-color: #191919;
-    border-color: #191919;
-}
-
-.btn-outline-primary {
-    color: #2a7dbd;
-    border-color: #2a7dbd;
-}
-
-.btn-outline-primary:hover {
-    color: #fff;
-    background-color: #2a7dbd;
-    border-color: #2a7dbd;
-}
-
-.social-buttons{
-    background: #2a7dbd;
-    padding:8px;
-}
-.social-buttons a{
-    color:white !important;
-    margin:8px;
-}
-
-.social-buttons a .fab, .social-buttons a .fas{
-    margin-right:4px;
-}
-
-.navbar {
-    text-transform: uppercase;
-    padding-top: 1.4375rem;
-    padding-bottom: 1.4375rem;
-    background-color: #ffffff;
-    box-shadow: 0px 2px 15px 0 #00000040;
-}
-
-.navbar-brand {
-    font-weight: 700;
-    color: #000000;
-}
-
-.navbar-expand-lg .navbar-nav .nav-link {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    white-space: nowrap;
-}
-
-/*
-.login-btn {
-    padding-left: 2rem;
-    background-image: url(../images/login_icon.png);
-    background-repeat: no-repeat;
-    background-position: 0.5rem center;
-    
-}*/
-
-.site-content {
-    padding-top: 5.375rem;
-}
-
-.hero {
-    background: url(../images/hero.jpg) no-repeat left top;
-    background-size: cover;
-    color: #ffffff;
-    padding-top: 2.625rem;
-}
-
-.hero-inner {
-    
-    text-align: center;
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-}
-
-.hero-content {
-    padding-right: 1rem;
-}
-
-.hero-title {
-    font-weight: bold;
-    font-size: 2rem;
-    line-height: 1.1875;
-}
-
-.hero-inner .hero-title {
-    text-transform: uppercase;
-}
-
-.features {
-    position: relative;
-}
-
-.features-title {
-    font-weight: 700;
-    color: #2a7ebe;
-    text-transform: uppercase;
-}
-
-.section-divider hr {
-    border-top: 1px solid #000000;
-    margin: 5rem 0;
-}
-
-.features-large .h1-dark {
-    color: #2a7ebe;
-    font-weight: bold;
-    font-size: 2rem;
-    line-height: 1.1875;
-    text-transform: uppercase;
-}
-
-.pricing-section {
-    padding-bottom: 3rem;
-}
-
-.pricing-title {
-    font-weight: bold;
-    font-size: 1.125rem;
-    line-break: 1.333333333333333;
-    text-transform: uppercase;
-    text-align: center;
-    color: #2a7dbd;
-}
-
-.pricing-subtitle {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.875rem;
-    line-height: 1.2;
-    margin-bottom: 1.75rem;
-}
-
-.pricing-box {
-    border: 1px solid #d0d0d0;
-    border-radius: 5px;
-    margin: 15px 0;
-    padding: 30px 20px 30px 30px;
-}
-
-.pricing-box:hover {
-    border-color: #2a7dbd;
-}
-
-.pricing-box:hover .btn-outline-primary {
-    color: #fff;
-    background-color: #2a7dbd;
-    border-color: #2a7dbd;
-}
-
-.pricing-box_title {
-    font-weight: bold;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    position: relative;
-}
-
-.pricing-box_title::after {
-    content: "";
-    width: 80px;
-    height: 4px;
-    background-color: #2a7dbd;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-
-.pricing-box_price {
-    padding: 1rem 0 1.5rem;
-    font-size: 42px;
-    line-height: 1;
-}
-
-.pricing-box_price p {
-    margin-bottom: 0;
-}
-
-.pricing-box_price p strong {
-    font-weight: 400;
-    font-size: 22px;
-}
-
-.pricing-box_price sup {
-    top: -0.3em;
-}
-
-.pricing-box_price span {
-    display: block;
-    font-weight: bold;
-    font-size: 1.25rem;
-    line-height: 1;
-    margin-top: -0.5rem;
-}
-
-.pricing-box_features {
-    /* padding: 1.25rem 1.875rem 1.5rem; */
-}
-
-.pricing-box_features ul {
-    padding: 0;
-    margin-bottom: 0;
-    list-style: none;
-    font-weight: bold;
-    font-size: 1rem;
-    line-height: 1.4;
-}
-
-.pricing-box_features ul li {
-    margin: 0.5rem 0;
-    /* padding-left: 1.875rem; */
-    /* background: url(../images/check_icon.png) no-repeat left 4px; */
-    font-weight: normal;
-}
-
-.pricing-box_btn {
-    margin-right: 10px;
-}
-
-.pricing-box_btn .btn {
-    width: 100%;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
-.stacktable.small-only {
-    display: none;
-}
-
-.price-detail-table .btn {
-    min-width: 140px;
-}
-
-.price-detail-table .table thead th:last-child,
-.price-detail-table .table tbody td:last-child {
-    text-align: center;
-}
-
-.price-detail-table tbody tr td:nth-last-child(2) {
-    color: #2a7dbd;
-}
-
-.price-detail-table thead tr th {
-    padding: 20px 0;
-    background-color: #2a7dbd;
-    font-weight: 400;
-    font-size: 20px;
-    color: #fff;
-    margin-bottom: 7px;
-    border-bottom: solid 7px #fff;
-}
-
-.price-detail-table tbody tr {
-    border-bottom: 7px solid #fff;
-}
-
-.price-detail-table thead tr th:first-child {
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 4px;
-    padding-left: 30px;
-}
-
-.price-detail-table thead tr th:last-child {
-    border-bottom-right-radius: 8px;
-    border-top-right-radius: 4px;
-}
-
-.price-detail-table tbody tr td {
-    padding: 15px 0;
-    background-color: #f2f2f2;
-    border-radius: 4px;
-    font-weight: 400 !important;
-    vertical-align: middle;
-}
-
-.price-detail-table tbody tr td:first-child {
-    padding-left: 30px;
-    font-weight: 500;
-    color: #000;
-}
-
-.newsletter-section {
-    background-color: #222222;
-    color: #ffffff;
-    padding: 2rem 0;
-}
-
-.newsletter-section-title {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 2rem;
-}
-
-.form-newsletter label {
-    display: block;
-    text-align: left;
-    margin-bottom: 0.25rem;
-}
-
-.form-newsletter .form-group {
-    margin-bottom: 0;
-    position: relative;
-}
-
-.form-newsletter .form-control {
-    border-radius: 10px;
-    padding-top: 0.8125rem;
-    padding-bottom: 0.8125rem;
-    height: auto;
-    border: none;
-    padding-right: 230px;
-}
-
-.form-newsletter .btn {
-    border-radius: 10px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 0.8125rem 1rem;
-    font-size: 0.875rem;
-    line-height: 1.714285714285714;
-}
-
-
-.required-asterisk {
-        position: absolute;
-        right: 20px;
-        font-size: 40px;
-        font-family: sans-serif;
-        top: -5px;
-        color: crimson;
-        pointer-events: none;
-    }
-
-#order-form .form-group{
-    margin-bottom:.3rem;
-}
-
-#order-form .form-control{
-    border-radius: 0;
-}
-
-span#merchant_payment {
-    word-break: break-word;
-}
-
-.table{
-    table-layout: fixed;
-}
-.table td{
-    word-break: break-all;
-}
-
-
-
-.footer-bottom {
-    background-color: #191919;
-    color: #ffffff;
-    padding-top: 2.8125rem;
-    padding-bottom: 2.5rem;
-}
-
-.footer-bottom h5 {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.footer-bottom h5 a {
-    color: #fff;
-}
-
-.footer-link {
-    list-style: none;
-    padding-left: 0;
-    margin-bottom: 0;
-    font-weight: 700;
-    font-size: 0.875rem;
-    line-height: 1.428571428571429;
-}
-
-.footer-link li {
-    margin-bottom: 1rem;
-}
-
-.footer-link li a {
-    color: #ffffff;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.footer-address h5,
-.footer-call h5 {
-    margin-bottom: 0;
-}
-
-.footer-copy {
-    background-color: #2a7ebe;
-    color: #ffffff;
-    text-align: center;
-    /* font-weight: 700; */
-    font-size: 0.875rem;
-    line-height: 1.571428571428571;
-    padding-top: 0.625rem;
-    padding-bottom: 0.625rem;
-}
-
-.footer-contact a{
- color:white;
-}
-
-@media screen and (max-width: 991px) {
-    .hero-content {
-        padding-bottom: 2rem;
-    }
-
-    .features-large .col-left {
-        margin-bottom: 1rem;
-    }
-
-    .features-large .col-right {
-        text-align: center;
-    }
-
-    .footer-company {
-        padding-top: 2rem;
-    }
-
-    .stacktable.large-only {
-        display: none;
-    }
-
-    .stacktable.small-only {
-        display: table;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .hero-title {
-        font-size: 1.75rem;
-    }
-
-    .section-divider hr {
-        margin: 2rem 0;
-    }
-
-    .pricing-box_features ul li {
-        background-position: left 1px;
-    }
-
-    .features-large .h1-dark,
-    .pricing-subtitle,
-    .pricing-box_title,
-    .newsletter-section-title {
-        font-size: 1.5rem;
-    }
-
-    .pricing-box_price {
-        font-size: 2.375rem;
-    }
-
-    .pricing-box_price span {
-        margin-top: 0;
-        font-size: 1rem;
-    }
-
-    .footer-link {
-        margin-bottom: 2rem;
-    }
-
-  
-}
-
-
-@media screen and (max-width: 992px) {
-    .site-content {
-        padding-top: 6rem;
-    }
-    
-}
-
-@media screen and (max-width: 576px) {
-    .form-newsletter .btn {
-        position: static;
-        width: 100%;
-        margin-top: 1rem;
-    }
-    .site-content {
-        padding-top: 7rem;
-    }
-}
-
-
-@media screen and (max-width: 375px) {
-    .navbar-brand{
-    margin:0;
-    padding: 0;
-    font-size: 1.1rem; 
-    }
-
-    .social-buttons{
-        padding:0;
-        font-size:.9rem;
-    }
-    .site-content {
-        padding-top: 6rem;
-    }
-}
-
-@media screen and (min-width: 992px) {
-    .hero-col-r {
-        padding-left: 0;
-    } 
-}
-
-
-
 
 /* CHAT - STYLES */
 
-  .cps_chat .message {
+  .telegram_live_chat .message {
     display: inline-block;
     max-width: 90%;
     border-radius: 10px;
@@ -547,28 +9,28 @@ span#merchant_payment {
     margin: 5px;
     word-wrap: break-word;
   }
-  .cps_chat .message_row {
+  .telegram_live_chat .message_row {
     margin-top: auto;
     position: relative;
     bottom: 0;
   }
-  .cps_chat .my_message {
+  .telegram_live_chat .my_message {
     background-color: #e9e9e9d1;
   }
   .message_with_err {
     background-color: #d88585d1 !important;
   }
-  .cps_chat .his_message {
+  .telegram_live_chat .his_message {
     background-color: dodgerblue;
     color:white;
   }
   
-  .cps_chat_body {
+  .telegram_live_chat_body {
     height: 80%;
     background: white;
   }
 
-  .cps_chat_body .inner {
+  .telegram_live_chat_body .inner {
     height: 100%;
     overflow-y: scroll;
     position: relative;
@@ -651,7 +113,7 @@ span#merchant_payment {
     box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
     background-color: #2a7dbd;
   }
-  .cps_chat {
+  .telegram_live_chat {
     
     position: relative;
     border: 2px solid #2a7dbd;
@@ -663,7 +125,7 @@ span#merchant_payment {
     bottom: 0;
     right: 0;
   }
-  .cps_chat_minimized {
+  .telegram_live_chat_minimized {
     width: 0% !important;
     height: 0% !important;
   }
@@ -736,20 +198,20 @@ span#merchant_payment {
   
   /* CHAT STYLES - Responsive */
 
-  .cps_chat_main_holder{
+  .telegram_live_chat_main_holder{
     width: 550px;
     position: fixed;
     bottom: 20px;
     right: 20px;
   }
 
-  .cps_chat{
+  .telegram_live_chat{
     width:100%;
     height:70vh;
   }
 
   @media (max-width: 550px) {
-    .cps_chat_main_holder {
+    .telegram_live_chat_main_holder {
       width: 90%;
       height: 5%;
     }

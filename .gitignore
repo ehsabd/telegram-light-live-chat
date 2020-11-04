@@ -1,1 +1,4 @@
 backend/livechat-config.php
+*__pycache__*
+test/venv
+test/run-test.sh

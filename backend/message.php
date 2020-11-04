@@ -14,20 +14,21 @@ define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
 
 global $livechat_db;
-
+global $livechat_prefix;
 $token = $_GET['token'];
 
 if (!empty($token)){
     $token = strtolower($token);
 
-    //1) if the bot message consists of an /tokenX:Y/ string:
-    // And Y is SHA256 hash of X
-    // We record Y(token) and chat_id in `admin_chat`
+    //1) We check if we have no admin
+    // And if the message equals BOT_ADMIN_SECRET
+    // We record ADMIN_CHAT_TOKEN and chat_id in `admin_chat`
 
     //2) if the bot message is anything else, we record it with time and chat_id into `admin_chat_message`, NOTE that the session_id when this script runs may be a malicious user trying to steal another one's chat so we don't store session_ids and we retrieve the messages based on the assumption that the admin can only chat with one person at a time and that has a current_chat_start_date_utc
        
     
     $offset = get_setting("last_telegram_bot_offset");
+    error_log('requesting getUpdates ...');
     $updates = apiRequest('getUpdates',array('offset'=>$offset));
     $messages =  array();
     
@@ -36,16 +37,10 @@ if (!empty($token)){
           $message = $update['message'];
           $chat_id = $message['chat']['id'];
           $message_text= $message['text'];
-          
-          if (preg_match('/token(.*):(.*)/', $message_text, $matches)){
-              
-              $private_key = $matches[1];
-              $admin_chat_token = strtolower($matches[2]);
-              $hash = hash('sha256', $private_key, false);
-              
-              if ($hash == $admin_chat_token){
-                  add_admin_chat($admin_chat_token, $chat_id);
-              }
+          error_log($message_text);
+          if ( $message_text == BOT_ADMIN_SECRET){ //TODO we should also check if there is no admin right now.
+            error_log('adding admin chat...');
+            add_admin_chat(ADMIN_CHAT_TOKEN, $chat_id);
             
           }else{
 
@@ -61,7 +56,7 @@ if (!empty($token)){
 
     
     if (!empty($messages)){
-      $insert_messages_cmd = build_insert_command($messages,'admin_chat_message',false);
+      $insert_messages_cmd = build_insert_command($messages,"${livechat_prefix}admin_chat_message",false);
       $livechat_db->query($insert_messages_cmd);
     }
    
@@ -140,6 +135,7 @@ if (!empty($token)){
    
 }
 
+
 function getDateFromEpcoch($epoch){
   $dt = new DateTime("@$epoch"); // convert UNIX timestamp to PHP DateTime
   return $dt->format('Y-m-d H:i:s');
@@ -153,16 +149,17 @@ function get_messages(&$admin_chat){
     $admin_chat['dirty'] = true;
 
     global $livechat_db;
-    
+    global $livechat_prefix;
     $current_chat_start_date_utc = $livechat_db->real_escape_string($admin_chat['current_chat_start_date_utc']);
     $chat_id = $livechat_db->real_escape_string($admin_chat['chat_id']);
 
-    $select_cmd = "SELECT message_date_utc, message_text FROM `admin_chat_message`
+    $select_cmd = "SELECT message_date_utc, message_text FROM `${livechat_prefix}admin_chat_message`
     WHERE chat_id='$chat_id'
     AND message_date_utc > '$current_chat_start_date_utc'
     AND is_read = '0'
     LOCK IN SHARE MODE
     ";
+    
 
     $result = $livechat_db->query($select_cmd);
 
@@ -178,7 +175,7 @@ function get_messages(&$admin_chat){
       echo json_encode($messages);
 
 
-      $update_is_read_cmd = "UPDATE `admin_chat_message` 
+      $update_is_read_cmd = "UPDATE `${livechat_prefix}admin_chat_message` 
       SET is_read = '1'
       WHERE chat_id = '$chat_id'";
 
@@ -254,7 +251,9 @@ function end_chat(&$admin_chat, $cause=''){
 
 function add_admin_chat($token, $chat_id){
     global $livechat_db;
-    $cmd = "INSERT INTO admin_chat (chat_id, token) VALUES ('$chat_id','$token');";
+    global $livechat_prefix;
+    $cmd = "INSERT INTO ${livechat_prefix}admin_chat (chat_id, token) VALUES ('$chat_id','$token');";
+    error_log($cmd);
     $livechat_db->query($cmd);
 }
 
@@ -262,8 +261,9 @@ function add_admin_chat($token, $chat_id){
 
 function get_admin_chat_by_token($token){
     global $livechat_db;
+    global $livechat_prefix;
     $token = $livechat_db->real_escape_string($token);
-    $cmd = "SELECT * FROM admin_chat WHERE token='$token';";
+    $cmd = "SELECT * FROM ${livechat_prefix}admin_chat WHERE token='$token';";
     $result = $livechat_db->query($cmd);
     if ($result){
       return $result->fetch_assoc();
@@ -274,13 +274,14 @@ function get_admin_chat_by_token($token){
 
 function update_admin_chat($admin_chat){
   global $livechat_db;
+  global $livechat_prefix;
   $chat_id=false;
   if (array_key_exists('chat_id', $admin_chat)){
       $chat_id = $livechat_db->real_escape_string($admin_chat['chat_id']);
       unset($admin_chat['chat_id']);
       unset($admin_chat['token']);
   }
-  $update_cmd = "UPDATE `admin_chat` SET";
+  $update_cmd = "UPDATE `${livechat_prefix}admin_chat` SET";
   $set_array = array();
   foreach($admin_chat as $k=>$v){
       if (empty($v)){

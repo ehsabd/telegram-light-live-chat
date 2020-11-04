@@ -1,8 +1,10 @@
 var message_id = 0;
-var chat_token =  "5776938C3A85BBE9BE158AE372ACA12B6FE45E4A96030CF6D289014906CE4014";
+var chat_token =  "default";
 var first_msg_sent = false;
 var is_heart_beating = false;
 var is_chat_minimized = true;
+var telegram_live_chat_message_url = '/telegram-live-chat/backend/message.php';
+
 function add_my_message_to_template(msg, time) {
     var elements = $(`
     <div id="msg`+message_id+`" class="row message_row m-0">
@@ -19,13 +21,13 @@ function add_my_message_to_template(msg, time) {
         </div>
     </div>
     `);
-    $(".cps_chat_body .inner .bottom_box").append(elements);
+    $(".telegram_live_chat_body .inner .bottom_box").append(elements);
     scrollToBottom();
     message_id++;
     return elements;
 }
 function add_his_message_to_template(msg, time) {
-    $(".cps_chat_body .inner .bottom_box").append(`
+    $(".telegram_live_chat_body .inner .bottom_box").append(`
     <div class="row message_row m-0">
         <div class="message his_message">
             <div class="content">
@@ -45,12 +47,12 @@ function add_his_message_to_template(msg, time) {
 }
 
 function scrollToBottom(){
-    $('.cps_chat_body .inner').scrollTop($('.cps_chat_body .inner .bottom_box').prop("offsetHeight"));
+    $('.telegram_live_chat_body .inner').scrollTop($('.telegram_live_chat_body .inner .bottom_box').prop("offsetHeight"));
 }
 
 
 function getNewMessages(callback) {
-    $.get( "https://customproxysolutions.com/webchat/message.php?token="+ chat_token)
+    $.get( telegram_live_chat_message_url+"?token="+ chat_token)
     .done(function( data ) {
         console.log("data fetched");
         callback(data);
@@ -63,7 +65,7 @@ function getNewMessages(callback) {
 
 function pushMessage(msg,email,name,element, callback) {
     $.post({
-        url: "https://customproxysolutions.com/webchat/message.php?token="+chat_token,
+        url: telegram_live_chat_message_url+"?token="+chat_token,
         // The key needs to match your method's input parameter (case-sensitive).
         data: JSON.stringify({message_text: msg, email:email, name:name}),
         contentType: "application/json; charset=utf-8",
@@ -71,7 +73,7 @@ function pushMessage(msg,email,name,element, callback) {
     }).done(function( data ) {
         update_status(element,'sent');
         if(!first_msg_sent){
-            $('.cps_chat .msg_input').attr('placeholder','Say something ...');
+            $('.telegram_live_chat .msg_input').attr('placeholder','Say something ...');
             first_msg_sent = true;   
         }
 
@@ -106,10 +108,10 @@ function resend_clicked(){
 
 }
 function send_clicked() {
-    var text = $('.cps_chat .msg_input').val();
-    var name = $('.cps_chat .name_input').val();
+    var text = $('.telegram_live_chat .msg_input').val();
+    var name = $('.telegram_live_chat .name_input').val();
     
-    var email = $(".cps_chat_main_holder .email_input").val();
+    var email = $(".telegram_live_chat_main_holder .email_input").val();
     if (!text || !name || !email){
         error_alert("Please fill all the inputs");
         return;
@@ -122,9 +124,9 @@ function send_clicked() {
     var hour_to_sec = datetext.split(':');
     var element = add_my_message_to_template(text, hour_to_sec[0] + ":" + hour_to_sec[1]);
     pushMessage(text,email,name ,element);
-    $('.cps_chat .msg_input').val('');
-    $('.cps_chat .email_input').hide();
-    $('.cps_chat .name_input').hide();
+    $('.telegram_live_chat .msg_input').val('');
+    $('.telegram_live_chat .email_input').hide();
+    $('.telegram_live_chat .name_input').hide();
 }
 
 function update_his_messages() {
@@ -168,12 +170,12 @@ function error_alert(msg){
 }
 
 function little_thumb_clicked(){
-    $('.cps_chat').removeClass('cps_chat_minimized');
+    $('.telegram_live_chat').removeClass('telegram_live_chat_minimized');
     $('.little_thumb').addClass('little_thumb_minimize');
     is_chat_minimized = false;
 }
 function minimize_clicked(){
-    $('.cps_chat').addClass('cps_chat_minimized');
+    $('.telegram_live_chat').addClass('telegram_live_chat_minimized');
     $('.little_thumb').removeClass('little_thumb_minimize');
     is_chat_minimized = true;
 }
