@@ -192,7 +192,7 @@ function check_email_validation(email){
 $(document).ready(function(){
     $('#send_button').click(send_clicked);
     $('.little_thumb').click(little_thumb_clicked);
-    $('.cps_header .minimize').click(minimize_clicked);
+    $('.telegram_live_chat_header .minimize').click(minimize_clicked);
     $('.resend_button').click(resend_clicked)
     $(".bottom_text_box_input").keydown(function (event) {
         if (event.which == 13) {

@@ -253,7 +253,7 @@ function add_admin_chat($token, $chat_id){
     global $livechat_db;
     global $livechat_prefix;
     $cmd = "INSERT INTO ${livechat_prefix}admin_chat (chat_id, token) VALUES ('$chat_id','$token');";
-    error_log($cmd);
+    //error_log($cmd);
     $livechat_db->query($cmd);
 }
 

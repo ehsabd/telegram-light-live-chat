@@ -129,20 +129,22 @@
     width: 0% !important;
     height: 0% !important;
   }
-  .cps_header {
+  
+  .telegram_live_chat_header {
     background-color: #2a7dbd;
     color: #fff;
     display: flex;
   }
-  .cps_header .content {
+  .telegram_live_chat_header .content {
     width: fit-content;
     padding: 15px;
   }
-  .cps_header .minimize {
+  .telegram_live_chat_header .minimize {
     padding: 15px;
     width: fit-content;
     margin-left: auto;
   }
+  
   .error_alert {
     position: absolute;
     right: 0;
